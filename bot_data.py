@@ -3,11 +3,11 @@ def read_file():
         data = text_file.readlines()
     return data
 
-CHANNEL =  int(read_file()[0]) #Channel ID is the second line of text file
+CHANNEL =  int(read_file()[0]) #Channel ID is the fist line of text file
 
-TOKEN = read_file()[1] #Token is the first line of text file
+TOKEN = read_file()[1] #Token is the second line of text file
 
-LOGPATH = read_file()[2].strip()
+LOGPATH = read_file()[2].strip() #Path to lastest.log is the third
 
 DEATH_MESSAGES = ["fell"
 ,"was doomed to fall"

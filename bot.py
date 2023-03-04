@@ -50,9 +50,9 @@ async def send_message(message, user_message):
                 with open(bot_data.LOGPATH, 'r') as file:
                     r = await run_blocking(follow, file, sleep_sec=0.1)
                     for line in r:
-                        for d in bot_data.DEATH_MESSAGES:
-                            if d in line and "[Server thread/INFO]" in line and "Named Entity" not in line:
-                                print(f'> {line}')
+                        if "[Server thread/INFO]" in line: #add <and "Named entity" not in line> to only have player deaths
+                            if any((match := substring) in line for substring in bot_data.DEATH_MESSAGES): #this should print messages once
+                                print(f'Keyword: {match} on Line :{line}')
                                 await message.channel.send(f'> {line}')
 
     except Exception as e:

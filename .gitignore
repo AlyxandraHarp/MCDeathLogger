@@ -131,4 +131,7 @@ dmypy.json
 # sensitive text files
 key.txt
 latest.log
+
+#test files
 test.txt
+test.py
