@@ -1,15 +1,11 @@
 import discord
 import responses
 import bot_data
-import aiofiles
-import asyncio
 import time
 import os
 from typing import Iterator
 import typing # For typehinting 
 import functools
-import threading
-from collections import deque
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -51,11 +47,12 @@ async def send_message(message, user_message):
             # Start logging
             #############################
             if (user_message == '!start'):
-                with open("latest.log", 'r') as file:
+                with open(bot_data.LOGPATH, 'r') as file:
                     r = await run_blocking(follow, file, sleep_sec=0.1)
                     for line in r:
                         for d in bot_data.DEATH_MESSAGES:
-                            if d in line and "[Server] [INFO]" in line:
+                            if d in line and "[Server thread/INFO]" in line and "Named Entity" not in line:
+                                print(f'> {line}')
                                 await message.channel.send(f'> {line}')
 
     except Exception as e:

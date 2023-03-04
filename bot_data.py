@@ -7,6 +7,8 @@ CHANNEL =  int(read_file()[0]) #Channel ID is the second line of text file
 
 TOKEN = read_file()[1] #Token is the first line of text file
 
+LOGPATH = read_file()[2].strip()
+
 DEATH_MESSAGES = ["fell"
 ,"was doomed to fall"
 ,"was struck"

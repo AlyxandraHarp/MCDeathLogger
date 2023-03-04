@@ -131,3 +131,4 @@ dmypy.json
 # sensitive text files
 key.txt
 latest.log
+test.txt

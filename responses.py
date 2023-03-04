@@ -1,4 +1,3 @@
-import random
 import bot_data
 
 """def random_response():
