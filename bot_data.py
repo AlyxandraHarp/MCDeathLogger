@@ -1,14 +1,28 @@
+##############################################
+# DESCRIPTION:
+# Important variables for logic
+##############################################
+
+# Reads every line in text file that user has already written to manually
 def read_file():
+    # SAMPLE TEXT IN KEY.TXT:
+    # <channel ID>           -- get this at the end of a discord server channel url
+    # <bot token>            -- get this on discord developer site
+    # <path of server log>   -- get this by checking your mc server files, the log file may be called 'latest.log'
     with open("key.txt", "r") as text_file:
         data = text_file.readlines()
     return data
 
-CHANNEL =  int(read_file()[0]) #Channel ID is the fist line of text file
+# Grab first line of text file
+CHANNEL =  int(read_file()[0]) 
+# Grab second line of text file
+TOKEN = read_file()[1] 
+# Grab third line of text file
+LOGPATH = read_file()[2].strip() 
 
-TOKEN = read_file()[1] #Token is the second line of text file
-
-LOGPATH = read_file()[2].strip() #Path to lastest.log is the third
-
+# List of all common (Vanilla) death messages
+# Duplicates removed, and p1, p2, p3 removed as a lot of the messages have these phrases in common
+# Full list of death messages can be found in the en_us.json file in jar file
 DEATH_MESSAGES = ["fell"
 ,"was doomed to fall"
 ,"was struck"
@@ -49,5 +63,5 @@ DEATH_MESSAGES = ["fell"
 ,"was stung to death"
 ,"froze to death"]
 
+# List of possible user commands that will trigger the bot
 USER_CMD = ["!start", "!help"] 
-#Eventually may want: ["!players", "!deathtoll", "!deathcount", "!deathlogger", "!obituary", "!start", "!help"]
