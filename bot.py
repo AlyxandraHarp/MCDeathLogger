@@ -27,7 +27,11 @@ def follow(file) -> Iterator[str]:
         # sleep if file hasn't been updated, sleep
         if not line:
             continue
-        yield line.strip()
+        else:
+            if ("[Server thread/INFO]" in line) and (any((match := substring) in line for substring in bot_data.DEATH_MESSAGES)): #add <and "Named entity" not in line> to only have player deaths
+                #this prints messages once when at least one death message is found in list
+                print(f'Keyword: {match} on Line :{line}')
+                yield line.strip()
 
 # Runs the blocking-heavy function is a non-blocking way
 # Reason for implimentation: Discord.gateway warning "Shard ID None heartbeat blocked for more than 10 seconds."
@@ -39,13 +43,9 @@ async def run_blocking(blocking_func: typing.Callable, *args, **kwargs) -> typin
 async def log_handler(message):
     with open(bot_data.LOGPATH, mode='r') as file:
         r = await run_blocking(follow, file)
-        #r = await follow() #run_blocking(follow)
         for line in r:
         # Check if new line contains text for a death message
-            if "[Server thread/INFO]" in line: #add <and "Named entity" not in line> to only have player deaths
-                if any((match := substring) in line for substring in bot_data.DEATH_MESSAGES): #this prints messages once hwne at least one death message is found in list
-                    print(f'Keyword: {match} on Line :{line}')
-                    await message.channel.send(f'> {line}')
+            await message.channel.send(f'> {line}')
 
 # Send message to channel from player prompt
 async def send_message(message, user_message):
