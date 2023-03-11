@@ -14,9 +14,9 @@ def read_file():
     return data
 
 # Grab first line of text file
-CHANNEL =  int(read_file()[0]) 
+CHANNEL =  int((read_file()[0]).strip()) # Strip string just in case code reads '\n' at the end of the line
 # Grab second line of text file
-TOKEN = read_file()[1] 
+TOKEN = read_file()[1].strip() 
 # Grab third line of text file
 LOGPATH = read_file()[2].strip() 
 

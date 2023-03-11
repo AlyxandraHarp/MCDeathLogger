@@ -16,7 +16,7 @@ def handle_response(message) -> str:
 
     # Sends information on commands
     if p_message == bot_data.USER_CMD[1]:
-        lstr = ['`!start = grabs death messages of server minecraft in real time`']
+        lstr = ['`!start = grabs death messages from the Minecraft server in real time`']
         delimiter = ' '
         final_str = delimiter.join(map(str, lstr))
         return final_str
