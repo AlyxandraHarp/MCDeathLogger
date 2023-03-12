@@ -11,6 +11,8 @@ import os
 from typing import Iterator
 import typing # For typehinting 
 import functools
+import asyncio
+import aiofiles
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -18,20 +20,23 @@ client = discord.Client(intents=intents)
 channel = bot_data.CHANNEL
 
 # Generator function that yields new lines in a file
-def follow(file) -> Iterator[str]:
+async def follow(message) -> Iterator[str]:
     # seek the end of the file
-    file.seek(0, os.SEEK_END)
-    while True:
-        # read last line of file
-        line = file.readline()
-        # sleep if file hasn't been updated, sleep
-        if not line:
-            continue
-        else:
-            if ("[Server thread/INFO]" in line) and (any((match := substring) in line for substring in bot_data.DEATH_MESSAGES)): #add <and "Named entity" not in line> to only have player deaths
-                #this prints messages once when at least one death message is found in list
-                print(f'Keyword: {match} on Line :{line}')
-                yield line.strip()
+    async with aiofiles.open(bot_data.LOGPATH, mode='r') as file:
+        await file.seek(0, os.SEEK_END)
+        while True:
+            # read last line of file
+            line = await file.readline()
+            # sleep if file hasn't been updated, sleep
+            if not line:
+                continue
+            else:
+                if ("[Server thread/INFO]" in line) and (any((match := substring) in line for substring in bot_data.DEATH_MESSAGES)): #add <and "Named entity" not in line> to only have player deaths
+                    #this prints messages once when at least one death message is found in list
+                    print("HERE!")
+                    print(f'Keyword: {match} on Line :{line.strip()}')
+                    yield line.strip()
+                
 
 # Runs the blocking-heavy function is a non-blocking way
 # Reason for implimentation: Discord.gateway warning "Shard ID None heartbeat blocked for more than 10 seconds."
@@ -41,11 +46,17 @@ async def run_blocking(blocking_func: typing.Callable, *args, **kwargs) -> typin
 
 # Read and follow log for death messages
 async def log_handler(message):
-    with open(bot_data.LOGPATH, mode='r') as file:
-        r = await run_blocking(follow, file)
-        for line in r:
-        # Check if new line contains text for a death message
+    
+        print("before await")
+        #f = await asyncio.create_task(run_blocking(follow, file, message))
+        task = await run_blocking(follow, message)
+        #a = await loop.run_until_complete(task)
+        print("after await")
+        async for line in task:
+            print(line)
             await message.channel.send(f'> {line}')
+        # Check if new line contains text for a death message
+            
 
 # Send message to channel from player prompt
 async def send_message(message, user_message):
